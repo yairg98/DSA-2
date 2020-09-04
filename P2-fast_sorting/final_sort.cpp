@@ -13,7 +13,7 @@ specifically to efficiently handle the files described in the assignment.
 Choice of sorting strategy and implementation was left entirely open.
 The algorithm below takes advantage of the finite list of names from which
 the data was generated, mapping each name to its place in the alphabetical
-order using a few simple operations and a "translation" array to convert the
+order using a few simple operations and a "translation" map to convert the
 output values to the correct indices.
 
 It essentially amounts to a rudimentary hash function/table, though I didn't
