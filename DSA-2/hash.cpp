@@ -1,7 +1,10 @@
 #include "hash.h"
 #include <iostream>
 #include <fstream>
+#include <cmath>
+#include <bits/stdc++.h>
 using namespace std;
+
 
 hashTable::hashTable( int size )
 	{
@@ -14,6 +17,9 @@ hashTable::hashTable( int size )
 // Insert new value to hash table (returns 0:success, 1:key already present, 2: rehash failed)
 int hashTable::insert(const std::string &key, void *pv)
 {
+	// Make key all lowercase
+	transform(key.begin(), key.end(), key.begin(), ::tolower);
+	
 	// Generate position value from hash function
 	int pos = hash(key);
 	
@@ -38,10 +44,51 @@ int hashTable::insert(const std::string &key, void *pv)
 	data[pos].key = key;
 	data[pos].isOccupied = true;
 	data[pos].isDeleted = false;
+	filled++;
 	return 0;
 }
 
 
+// Return true is hashTable contains the given key; otherwise return false
+bool hashTable::contains(const std::string &key) 
+{
+	return (findPos(key) == -1) ? false : true; 
+}
+
+
+// Delete item from hash table; return true/false for success/failure
+bool hashTable::remove(const std::string &key)
+{
+	int pos = findPos(key);
+	if (pos == -1) { return false; }
+	else {
+		data[pos].isOccupied = false;
+		data[pos].isDeleted = true;
+		return true;
+	}
+}
+
+
+// Hash function
+int hashTable::hash(const std::string &key)
+{
+	int hash = 0;
+	int base = 0;
+	int exp = 0;
+	long val = 0;
+	
+	for (int i=0; i < key.length(); i++) {
+		base = 30 - ( int(key[i]) % 26 );
+		exp = 10-(i%5);
+		val = pow(base, exp) + int(key[i]);
+		hash = (hash + val) % capacity;
+	}
+	
+	return hash;
+}
+
+
+// Return the position of the given key, or -1 if not found
 int hashTable::findPos(const std::string &key)
 {
 	// Search for key
@@ -56,13 +103,7 @@ int hashTable::findPos(const std::string &key)
 }
 
 
-// Return true is hashTable contains the given key; otherwise return false
-bool hashTable::contains(const std::string &key) 
-{
-	return (findPos(key) == -1) ? false : true; 
-}
-
-
+// Return the first prime number from the list larger than "size"
 unsigned int hashTable::getPrime(int size)
 {
 	// Precalculated list of primes ranging from ~1,000 to ~4,000,000
