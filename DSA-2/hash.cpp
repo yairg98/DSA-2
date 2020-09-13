@@ -15,7 +15,7 @@ hashTable::hashTable( int size )
 int hashTable::insert(const std::string &key, void *pv)
 {
 	// Generate position value from hash function
-	int pos = findPos(key);
+	int pos = hash(key);
 	
 	// Search for location of key (if already inserted) or 1st available spot
 	while ( data[pos].isOccupied && data[pos].key != key) {
@@ -42,6 +42,27 @@ int hashTable::insert(const std::string &key, void *pv)
 }
 
 
+int hashTable::findPos(const std::string &key)
+{
+	// Search for key
+	int pos = hash(key);
+	while ( data[pos].isOccupied || data[pos].isDeleted) {
+		if (data[pos].key == key) { return pos; }
+		++pos %= capacity;
+	}
+	
+	// If the key is not found
+	return -1;
+}
+
+
+// Return true is hashTable contains the given key; otherwise return false
+bool hashTable::contains(const std::string &key) 
+{
+	return (findPos(key) == -1) ? false : true; 
+}
+
+
 unsigned int hashTable::getPrime(int size)
 {
 	// Precalculated list of primes ranging from ~1,000 to ~4,000,000
@@ -61,3 +82,5 @@ unsigned int hashTable::getPrime(int size)
     } 
     return mid;
 }
+
+
