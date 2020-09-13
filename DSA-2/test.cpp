@@ -9,6 +9,18 @@
 
 using namespace std;
 
+
+// Use folding on a string, summed 4 bytes at a time
+int sfold(string s, int M) {
+  long sum = 0, mul = 1;
+  for (int i = 0; i < s.length(); i++) {
+    mul = (i % 2 == 0) ? 1 : mul * 256;
+    sum += s[i] * mul;
+  }
+  return (int)(abs(sum) % M);
+}
+
+
 int main()
 {
 	string s[] = { "a", "abc", "HellowWorld", "MissionImpossible", "???", "if", "in", "it", "is", "aaple" };
@@ -18,16 +30,14 @@ int main()
 	int hash = 0;
 	int base = 0;
 	int exp = 0;
+	int capacity = 16001;
 	
-	for (int j=0; j < sizeof(s)/sizeof(s[0]); j++) {	
-		transform(s[j].begin(), s[j].end(), s[j].begin(), ::tolower);
-		cout << s[j] << endl;
-		for (int i=0; i < s[j].length(); i++) {
-			base = 30 - ( int(s[j][i]) % 26 );
-			exp = 10-(i%5);
-			val = pow(base, exp) + int(s[j][i]);
-			hash = (hash + val) % 2048003;
-		}
+	for (string str : s) {	
+		transform(str.begin(), str.end(), str.begin(), ::tolower);
+		cout << str << endl;
+		
+		hash = sfold(str, capacity);
+		
 		cout << hash << endl;
 	}
 }
