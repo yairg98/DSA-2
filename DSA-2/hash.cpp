@@ -17,27 +17,41 @@ hashTable::hashTable( int size )
 // Insert new value to hash table (returns 0:success, 1:key already present, 2: rehash failed)
 int hashTable::insert(const std::string &key, void *pv)
 {
-	// Make key all lowercase
-	transform(key.begin(), key.end(), key.begin(), ::tolower);
-	
 	// Generate position value from hash function
 	int pos = hash(key);
 	
 	// Search for location of key (if already inserted) or 1st available spot
 	while ( data[pos].isOccupied && data[pos].key != key) {
+		//cout << "1. " << key << endl; // test
 		++pos %= capacity;
 	}
 	
 	// Return 1 if the key was already in the hash table
 	if (data[pos].key == key) {
+		cout << "2. " << key << endl; // test
 		return 1;
 	}
 	
 	// Rehash if necessary; return 2 if rehash fails
-	else if (capacity/filled == 1) {
+	else if (capacity / (capacity-filled) >= 2) {
+		cout << "3. " << key << endl; // test
+		cout << "Capacity: " << capacity << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
+		cout << "*****************" << endl;
 		if (rehash() == false) {
+			cout << "4. " << key << endl;
 			return 2;
 		}
+		cout << "New capacity: " << capacity << endl;
 	}
 	
 	// Insert new key at data[pos]
@@ -72,19 +86,12 @@ bool hashTable::remove(const std::string &key)
 // Hash function
 int hashTable::hash(const std::string &key)
 {
-	int hash = 0;
-	int base = 0;
-	int exp = 0;
-	long val = 0;
-	
-	for (int i=0; i < key.length(); i++) {
-		base = 30 - ( int(key[i]) % 26 );
-		exp = 10-(i%5);
-		val = pow(base, exp) + int(key[i]);
-		hash = (hash + val) % capacity;
+	long sum = 0, mul = 1;
+	for (int i = 0; i < key.length(); i++) {
+		mul = (i % 8 == 0) ? 1 : mul * 256;
+		sum += tolower(key[i]) * mul; // Note: conversion to lowercase
 	}
-	
-	return hash;
+	return (int)(abs(sum) % capacity);
 }
 
 
@@ -103,25 +110,43 @@ int hashTable::findPos(const std::string &key)
 }
 
 
+bool hashTable::rehash()
+{
+	// Back up all current data to backup vector and erase contents of original data vector
+	vector<hashItem> backup = data;
+	for (auto i : data) {
+		i.isOccupied = false;
+		i.isDeleted = false;
+		i.key = "";
+	}
+	
+	// Adjust capacity and resize the data vector
+	capacity = getPrime(capacity);
+	
+	try { data.resize(capacity); }
+	catch (std::bad_alloc) { 
+		cout << "REHASH FAILED" << endl;
+		return false;
+	}
+	
+	
+	// Restore data from backup
+	for (auto i : backup) {
+		if (i.key != "") { insert(i.key); }
+	}
+	return true;
+}
+
+
 // Return the first prime number from the list larger than "size"
 unsigned int hashTable::getPrime(int size)
 {
 	// Precalculated list of primes ranging from ~1,000 to ~4,000,000
 	static int primes[] = {1009, 2003, 4001, 16001, 32003, 64007, 128021, 256019, 512009, 1024021, 2048003, 4096013};
 	
-	// Find first prime larger than "size"
-	int start = 0; 
-	int end = sizeof(primes)/sizeof(primes[0]);
-	int mid = (start + end) / 2;
-    while (start <= end) 
-    { 
-        mid = (start + end) / 2;
-		// Move right
-        if (primes[mid] <= size) { start = mid + 1; }
-        // Move left
-        else { end = mid - 1; }
-    } 
-    return mid;
+	for (int i : primes) {
+		if (i > size) { return i; }
+	}
+	return primes[11];
 }
-
 
