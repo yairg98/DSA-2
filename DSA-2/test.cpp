@@ -6,11 +6,14 @@
 #include <string>
 #include<bits/stdc++.h>
 #include <cstring>
+#include <thread>
+#include <chrono>
+#include <ctime>
+
 
 using namespace std;
 
 
-// Use folding on a string, summed 4 bytes at a time
 // https://opendsa-server.cs.vt.edu/ODSA/Books/CS3/html/HashFuncExamp.html
 int sfold(string s, int M) {
   long sum = 0, mul = 1;
@@ -22,19 +25,49 @@ int sfold(string s, int M) {
 }
 
 
+
+void test(int id)
+{
+	// clock_t t1 = clock();
+	
+	bool b;
+	for (int i=0; i < 10; i++) {
+		cout << id << ": " << i << endl;
+		// this_thread::sleep_for(chrono::milliseconds(10));
+		for (long x=0; x<100000000; x++) { x%2==0 ? true : false; }
+	}
+	
+	// clock_t t2 = clock();
+	// double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
+	
+	// cout <<  id << " Thread time: " << timeDiff << endl;
+}
+
+
 int main()
 {
-	string s[] = { "a", "abc", "HellowWorld", "MissionImpossible", "???", "if", "in", "it", "is", "aaple", "ape", "hello", "on", "no" };
+	cout << "Available threads: " << std::thread::hardware_concurrency() << endl;
 	
-	int hash = 0;
-	int capacity = 16001;
+	clock_t t1 = clock();
 	
-	for (string str : s) {	
-		// transform(str.begin(), str.end(), str.begin(), ::tolower);
-		// cout << str << endl;
-		
-		hash = sfold(str, capacity);
-		
-		cout << hash << endl;
+	int i = 0;
+	vector<std::thread> all_threads;
+	while ( i < thread::hardware_concurrency()/2 ) {
+		all_threads.push_back(thread(test, i));
+		i++;
 	}
+	
+	for (thread & t : all_threads) {
+		t.join();
+	}
+	// std::thread first(test, "First - ");
+	// std::thread secnd(test, "Secnd - ");
+	
+	// first.join();
+	// secnd.join();
+	
+	clock_t t2 = clock();
+	double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
+	
+	cout << "Total time: " << timeDiff << endl;
 }
