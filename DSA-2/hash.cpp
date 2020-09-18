@@ -3,6 +3,8 @@
 #include <fstream>
 #include <cmath>
 #include <bits/stdc++.h>
+#include <typeinfo>
+#include <string>
 using namespace std;
 
 
@@ -16,12 +18,12 @@ hashTable::hashTable( int size )
 
 // Insert new value to hash table (returns 0:success, 1:key already present, 2: rehash failed)
 int hashTable::insert(const std::string &key, void *pv)
-{
+{	
 	// Generate position value from hash function
 	int pos = hash(key);
 	
 	// Search for location of key (if already inserted) or 1st available spot
-	while ( data[pos].isOccupied && data[pos].key != key) {
+	while ( data[pos].isOccupied && (data[pos].key != key)) {
 		//cout << "1. " << key << endl; // test
 		++pos %= capacity;
 	}
@@ -123,6 +125,7 @@ bool hashTable::rehash()
 	for (auto i : backup) {
 		if (i.key != "") { insert(i.key); }
 	}
+	
 	return true;
 }
 
@@ -137,5 +140,20 @@ unsigned int hashTable::getPrime(int size)
 		if (i > size) { return i; }
 	}
 	return primes[11];
+}
+
+
+void hashTable::test()
+{
+	string str = "inroad";
+	for (auto i : data) {
+		if (i.key != "") {
+			// for (int j=0; j<str.length() && j<i.key.length(); j++) {
+				// cout << (i.key[j]==str[j]) << endl;
+			// }
+			cout << i.key << endl;
+			cout << (i.key == str) << endl;
+		}
+	}
 }
 

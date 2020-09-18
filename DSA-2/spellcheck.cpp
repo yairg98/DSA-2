@@ -22,14 +22,7 @@ hashTable loadDictionary(string dict_file)
 	while ( getline(input, entry) ) {
 		transform(entry.begin(), entry.end(), entry.begin(), ::tolower);
 		dict.insert(entry);
-		
-		// cout << dict.contains(entry) << endl;
-		cout << dict.contains("sermon") << endl;
-		
 	}
-	
-	string str = "sermon";
-	cout << dict.contains(str) << endl;
 	
 	return dict;
 }
@@ -120,9 +113,9 @@ int main()
 	// Load the dictionary
 	hashTable dict = loadDictionary(dict_file);
 	
-	cout << dict.contains("sermon") << endl;
-	
 	// Check the input file
 	spellChecker(infile, outfile, dict);
+	
+	dict.test();
 	
 }
