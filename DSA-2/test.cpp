@@ -28,19 +28,18 @@ int sfold(string s, int M) {
 
 void test(int id)
 {
-	// clock_t t1 = clock();
+	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	
 	bool b;
 	for (int i=0; i < 10; i++) {
-		cout << id << ": " << i << endl;
 		// this_thread::sleep_for(chrono::milliseconds(10));
 		for (long x=0; x<100000000; x++) { x%2==0 ? true : false; }
 	}
 	
-	// clock_t t2 = clock();
-	// double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
+	chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+	chrono::duration<double> timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
 	
-	// cout <<  id << " Thread time: " << timeDiff << endl;
+	cout <<  id << " Thread time: " << timeDiff.count() << endl;
 }
 
 
@@ -48,26 +47,26 @@ int main()
 {
 	cout << "Available threads: " << std::thread::hardware_concurrency() << endl;
 	
-	clock_t t1 = clock();
-	
-	int i = 0;
-	vector<std::thread> all_threads;
-	while ( i < thread::hardware_concurrency()/2 ) {
-		all_threads.push_back(thread(test, i));
-		i++;
+	for (int n=1 n<=thread::hardware_concurrency(); n++) {
+		cout << "\n********  " << n << "  ********" << endl;
+			
+		chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
+		
+		int i = 0;
+		vector<std::thread> all_threads;
+		while ( i < n ) { // thread::hardware_concurrency()
+			all_threads.push_back(thread(test, i));
+			i++;
+		}
+		
+		for (thread & t : all_threads) {
+			t.join();
+		}
+		
+		chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+		chrono::duration<double> timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+		
+		
+		cout << "Total time: " << timeDiff.count() << endl;
 	}
-	
-	for (thread & t : all_threads) {
-		t.join();
-	}
-	// std::thread first(test, "First - ");
-	// std::thread secnd(test, "Secnd - ");
-	
-	// first.join();
-	// secnd.join();
-	
-	clock_t t2 = clock();
-	double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
-	
-	cout << "Total time: " << timeDiff << endl;
 }
