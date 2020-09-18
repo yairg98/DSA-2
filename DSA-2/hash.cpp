@@ -28,14 +28,14 @@ int hashTable::insert(const std::string &key, void *pv)
 	
 	// Return 1 if the key was already in the hash table
 	if (data[pos].key == key) {
-		cout << "2. " << key << endl; // test
+		// cout << "2. " << key << endl; // test
 		return 1;
 	}
 	
 	// Rehash if necessary; return 2 if rehash fails
 	else if (capacity / (capacity-filled) >= 2) {
-		cout << "3. " << key << endl; // test
-		cout << "Capacity: " << capacity << endl;
+		// cout << "3. " << key << endl; // test
+		// cout << "Capacity: " << capacity << endl;
 		if (rehash() == false) {
 			cout << "4. " << key << endl;
 			return 2;

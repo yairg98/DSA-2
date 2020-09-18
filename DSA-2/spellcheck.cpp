@@ -7,6 +7,7 @@ hashTable loadDictionary(string dict_file)
 	ifstream input(dict_file);
 	
 	string entry;
+	string prev;
 	
 	// Count lines of dict to initialize hash table with correct size
 	int size = 0;
@@ -21,26 +22,88 @@ hashTable loadDictionary(string dict_file)
 	while ( getline(input, entry) ) {
 		transform(entry.begin(), entry.end(), entry.begin(), ::tolower);
 		dict.insert(entry);
-	}
 		
+		// cout << dict.contains(entry) << endl;
+		cout << dict.contains("sermon") << endl;
+		
+	}
+	
+	string str = "sermon";
+	cout << dict.contains(str) << endl;
+	
 	return dict;
 }
 
 
-void spellChecker(string input_file, string output_file)
+bool checkWord(string word, hashTable dict)
+{	
+	// Possibly unnecessary to check for empty word
+	return word=="" ? true : dict.contains(word);
+}
+
+
+void checkLine(string line, int num, hashTable dict, ofstream &outfile)
+{
+	transform(line.begin(), line.end(), line.begin(), ::tolower);
+
+	string word = "";
+	bool numerical = false;
+	
+	for (int i=0; i<line.length(); i++) {
+		
+		// Add non-numerical character
+		if ( (line[i] >= 96 && line[i] <= 122) || (line[i] == 45)) { 
+			word += line[i];
+		}
+		
+		// Add numerical character
+		else if ( line[i] >= 48 && line[i] <= 57 ) {
+			numerical = true;
+			word += line[i];
+		}
+		
+		// Reached end of word
+		else {
+			
+			// Check if word is too long
+			if ( word.length() > 20 ) {
+				outfile << "Long word at line " << to_string(num) << ", starts: " << word.substr(0,20) << endl;
+			}
+			
+			// Check if word is not numerical or in dictionary
+			else if ( numerical == false && checkWord(word, dict) == false ) {
+				outfile << "Unknown word at line " << to_string(num) << ": " << word << endl;
+			}
+			
+			word = "";
+			numerical = false;
+		}
+	}
+}
+
+
+void spellChecker(string infile, string outfile, hashTable dict)
 {
 	// Open spellchecker file input/output streams
-	ifstream input(input_file);
-	ofstream output(output_file);
+	ifstream input(infile);
+	ofstream output(outfile);
+	
+	// Check one line at a time
+	string line;
+	string out;
+	int num = 1;
+	while ( getline(input, line) ) {
+		checkLine(line, num, dict, output);
+		num++;
+	}
 }
 
 
 int main() 
 {
 	string dict_file;
-	string input_file;
-	string output_file;
-	
+	string infile;
+	string outfile;
 	
 	// User enters input file name
 	cout << "Dictionary file: " << endl;
@@ -48,12 +111,18 @@ int main()
 	
 	// User enters input file name
 	cout << "Input file: " << endl;
-	cin >> input_file;
+	cin >> infile;
 
 	// User enters output file name
 	cout << "Output file: " << endl;
-	cin >> output_file;
+	cin >> outfile;
 	
+	// Load the dictionary
 	hashTable dict = loadDictionary(dict_file);
+	
+	cout << dict.contains("sermon") << endl;
+	
+	// Check the input file
+	spellChecker(infile, outfile, dict);
 	
 }
