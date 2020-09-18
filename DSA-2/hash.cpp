@@ -36,17 +36,6 @@ int hashTable::insert(const std::string &key, void *pv)
 	else if (capacity / (capacity-filled) >= 2) {
 		cout << "3. " << key << endl; // test
 		cout << "Capacity: " << capacity << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
-		cout << "*****************" << endl;
 		if (rehash() == false) {
 			cout << "4. " << key << endl;
 			return 2;
