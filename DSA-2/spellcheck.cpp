@@ -45,7 +45,7 @@ void checkLine(string line, int num, hashTable dict, ofstream &outfile)
 	for (int i=0; i<line.length(); i++) {
 		
 		// Add non-numerical character
-		if ( (line[i] >= 96 && line[i] <= 122) || (line[i] == 45)) { 
+		if ( (line[i] >= 97 && line[i] <= 122) || (line[i] == 45) || (line[i] == 39) ) { 
 			word += line[i];
 		}
 		
@@ -116,6 +116,6 @@ int main()
 	// Check the input file
 	spellChecker(infile, outfile, dict);
 	
-	dict.test();
+	// dict.test();
 	
 }
