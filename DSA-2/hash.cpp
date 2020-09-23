@@ -101,27 +101,25 @@ int hashTable::findPos(const std::string &key)
 
 bool hashTable::rehash()
 {
-	// Back up all current data to backup vector and erase contents of original data vector
-	vector<hashItem> backup = data;
-	for (auto i : data) {
-		i.isOccupied = false;
-		i.isDeleted = false;
-		i.key = "";
-	}
+	// create backup vector, and fnd new data capacity
+	int new_cap = getPrime(capacity);
+	vector<hashItem> backup;
+	data.swap(backup);
 	
-	// Adjust capacity and resize the data vector
-	capacity = getPrime(capacity);
-	
-	try { data.resize(capacity); }
-	catch (std::bad_alloc) { 
+	//
+	try { data.resize(new_cap); }// Adjust data vector to the new size
+	catch (std::bad_alloc) {
 		cout << "REHASH FAILED" << endl;
 		return false;
 	}
 	
+	capacity = new_cap;
+	filled = 0;
 	
-	// Restore data from backup
 	for (auto i : backup) {
-		if (i.key != "") { insert(i.key); }
+		if ( (i.isOccupied == true) && (i.isDeleted == false) ) {
+			insert(i.key);
+		}
 	}
 	
 	return true;

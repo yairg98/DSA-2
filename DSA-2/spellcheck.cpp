@@ -15,14 +15,14 @@ hashTable loadDictionary(string dict_file)
 	string entry;
 	string prev;
 	
-	// Count lines of dict to initialize hash table with correct size
+/* 	// Count lines of dict to initialize hash table with appropriate size (size*2)
 	int size = 0;
 	while ( getline(input, entry) ) {
 		size++;
-	}
+	} */
 	
 	// Initialize hash table and add each dictionary entry
-	hashTable dict = hashTable(100000); // initialize to " size*2 " for efficiency
+	hashTable dict = hashTable(100000); // assuming a dictionaryr size of 50,000 words
 	input.clear();
 	input.seekg(0); // Return pointer to first line
 	while ( getline(input, entry) ) {
