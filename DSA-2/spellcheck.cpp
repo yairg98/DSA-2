@@ -1,5 +1,11 @@
-#include "hash.cpp"
-
+#include <string>
+#include <iostream>
+#include <fstream>
+#include "hash.h"
+#include <bits/stdc++.h>
+#include <chrono>
+#include <ctime>
+using namespace std;
 
 hashTable loadDictionary(string dict_file)
 {	
@@ -16,7 +22,7 @@ hashTable loadDictionary(string dict_file)
 	}
 	
 	// Initialize hash table and add each dictionary entry
-	hashTable dict = hashTable(size*2);
+	hashTable dict = hashTable(49000);
 	input.clear();
 	input.seekg(0); // Return pointer to first line
 	while ( getline(input, entry) ) {
@@ -28,16 +34,17 @@ hashTable loadDictionary(string dict_file)
 }
 
 
-bool checkWord(string word, hashTable dict)
+bool checkWord(string word, hashTable &dict)
 {	
 	// Possibly unnecessary to check for empty word
 	return word=="" ? true : dict.contains(word);
 }
 
 
-void checkLine(string line, int num, hashTable dict, ofstream &outfile)
+void checkLine(string &line, int num, hashTable &dict, ofstream &output)
 {
 	transform(line.begin(), line.end(), line.begin(), ::tolower);
+	line.append(" ");
 
 	string word = "";
 	bool numerical = false;
@@ -60,12 +67,12 @@ void checkLine(string line, int num, hashTable dict, ofstream &outfile)
 			
 			// Check if word is too long
 			if ( word.length() > 20 ) {
-				outfile << "Long word at line " << to_string(num) << ", starts: " << word.substr(0,20) << endl;
+				output << "Long word at line " << to_string(num) << ", starts: " << word.substr(0,20) << endl;
 			}
 			
 			// Check if word is not numerical or in dictionary
 			else if ( numerical == false && checkWord(word, dict) == false ) {
-				outfile << "Unknown word at line " << to_string(num) << ": " << word << endl;
+				output << "Unknown word at line " << to_string(num) << ": " << word << endl;
 			}
 			
 			word = "";
@@ -111,10 +118,19 @@ int main()
 	cin >> outfile;
 	
 	// Load the dictionary
+	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	hashTable dict = loadDictionary(dict_file);
+	chrono::steady_clock::time_point t2 = chrono::steady_clock::now();
+	chrono::duration<double> timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+	cout << "Time to load dictionary: " << timeDiff.count() << endl;
 	
 	// Check the input file
+	t1 = chrono::steady_clock::now();
 	spellChecker(infile, outfile, dict);
+	t2 = chrono::steady_clock::now();
+	timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+	cout << "Time to spellcheck document: " << timeDiff.count() << endl;
+	
 	
 	// dict.test();
 	

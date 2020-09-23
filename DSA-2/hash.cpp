@@ -1,8 +1,6 @@
 #include "hash.h"
 #include <iostream>
-#include <fstream>
 #include <cmath>
-#include <bits/stdc++.h>
 #include <typeinfo>
 #include <string>
 using namespace std;
@@ -36,8 +34,7 @@ int hashTable::insert(const std::string &key, void *pv)
 	
 	// Rehash if necessary; return 2 if rehash fails
 	else if (capacity / (capacity-filled) >= 2) {
-		// cout << "3. " << key << endl; // test
-		// cout << "Capacity: " << capacity << endl;
+		cout << "3. Rehashing... " << key << endl; // test
 		if (rehash() == false) {
 			cout << "4. " << key << endl;
 			return 2;
@@ -77,6 +74,7 @@ bool hashTable::remove(const std::string &key)
 // Hash function
 int hashTable::hash(const std::string &key)
 {
+	// https://opendsa-server.cs.vt.edu/ODSA/Books/CS3/html/HashFuncExamp.html
 	long sum = 0, mul = 1;
 	for (int i = 0; i < key.length(); i++) {
 		mul = (i % 8 == 0) ? 1 : mul * 256;
