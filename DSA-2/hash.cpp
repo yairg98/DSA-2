@@ -6,6 +6,7 @@
 using namespace std;
 
 
+// Constructor to initialize hashTable with chosen capacity ("size")
 hashTable::hashTable( int size )
 	{
 		capacity = getPrime(size);
@@ -22,24 +23,20 @@ int hashTable::insert(const std::string &key, void *pv)
 	
 	// Search for location of key (if already inserted) or 1st available spot
 	while ( data[pos].isOccupied && (data[pos].key != key)) {
-		//cout << "1. " << key << endl; // test
 		++pos %= capacity;
 	}
 	
 	// Return 1 if the key was already in the hash table
 	if (data[pos].key == key) {
-		// cout << "2. " << key << endl; // test
 		return 1;
 	}
 	
-	// Rehash if necessary; return 2 if rehash fails
+	// Rehash when more than half the hashTable capacity is filled
 	else if (capacity / (capacity-filled) >= 2) {
-		cout << "3. Rehashing... " << key << endl; // test
+		// Attempt rehash; return 2 in case of failure
 		if (rehash() == false) {
-			cout << "4. " << key << endl;
 			return 2;
 		}
-		cout << "New capacity: " << capacity << endl;
 	}
 	
 	// Insert new key at data[pos]
@@ -51,7 +48,7 @@ int hashTable::insert(const std::string &key, void *pv)
 }
 
 
-// Return true is hashTable contains the given key; otherwise return false
+// Return true if hashTable contains the given key; otherwise return false
 bool hashTable::contains(const std::string &key) 
 {
 	return (findPos(key) == -1) ? false : true; 
@@ -71,10 +68,10 @@ bool hashTable::remove(const std::string &key)
 }
 
 
-// Hash function
+// Hash function - given a string, return a numerrcal hash value
+// Source: https://opendsa-server.cs.vt.edu/ODSA/Books/CS3/html/HashFuncExamp.html
 int hashTable::hash(const std::string &key)
 {
-	// https://opendsa-server.cs.vt.edu/ODSA/Books/CS3/html/HashFuncExamp.html
 	long sum = 0, mul = 1;
 	for (int i = 0; i < key.length(); i++) {
 		mul = (i % 8 == 0) ? 1 : mul * 256;
@@ -99,6 +96,7 @@ int hashTable::findPos(const std::string &key)
 }
 
 
+// Expland the hashTable capacity and rehash all current data accordinglgy
 bool hashTable::rehash()
 {
 	// create backup vector, and fnd new data capacity
@@ -126,29 +124,30 @@ bool hashTable::rehash()
 }
 
 
-// Return the first prime number from the list larger than "size"
+// Return the first prime number from the list larger than given "size"
 unsigned int hashTable::getPrime(int size)
 {
 	// Precalculated list of primes ranging from ~1,000 to ~4,000,000
 	static int primes[] = {1009, 2003, 4001, 16001, 32003, 64007, 128021, 256019, 512009, 1024021, 2048003, 4096013};
 	
+	// Not the most efficient, but it's such a short list that it does not matter
+	// Assumes the list to be sorted
 	for (int i : primes) {
 		if (i > size) { return i; }
 	}
+	
+	// If the list is maxed out, just return the largest value (last)
 	return primes[11];
 }
 
 
+// Ignore - public wrapper for easy testing of private hashTable functions, etc.
 void hashTable::test()
 {
 	string str = "inroad";
 	for (auto i : data) {
 		if (i.key != "") {
-			// for (int j=0; j<str.length() && j<i.key.length(); j++) {
-				// cout << (i.key[j]==str[j]) << endl;
-			// }
 			cout << i.key << endl;
-			cout << (i.key == str) << endl;
 		}
 	}
 }
