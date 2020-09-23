@@ -22,7 +22,7 @@ hashTable loadDictionary(string dict_file)
 	}
 	
 	// Initialize hash table and add each dictionary entry
-	hashTable dict = hashTable(49000);
+	hashTable dict = hashTable(100000); // initialize to " size*2 " for efficiency
 	input.clear();
 	input.seekg(0); // Return pointer to first line
 	while ( getline(input, entry) ) {
