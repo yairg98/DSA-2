@@ -13,17 +13,6 @@
 using namespace std;
 
 
-// https://opendsa-server.cs.vt.edu/ODSA/Books/CS3/html/HashFuncExamp.html
-int sfold(string s, int M) {
-  long sum = 0, mul = 1;
-  for (int i = 0; i < s.length(); i++) {
-    mul = (i % 4 == 0) ? 1 : mul * 256;
-    sum += tolower(s[i]) * mul;
-  }
-  return (int)(abs(sum) % M);
-}
-
-
 
 void test(int id)
 {
@@ -46,7 +35,7 @@ int main()
 {
 	cout << "Available threads: " << std::thread::hardware_concurrency() << endl;
 	
-	for (int n=1 n<=thread::hardware_concurrency(); n++) {
+	for (int n=1; n<=thread::hardware_concurrency(); n++) {
 		cout << "\n********  " << n << "  ********" << endl;
 			
 		chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
