@@ -28,6 +28,7 @@ int hashTable::insert(const std::string &key, void *pv)
 	
 	// Return 1 if the key was already in the hash table
 	if (data[pos].key == key) {
+		data[pos].isDeleted = false;
 		return 1;
 	}
 	
@@ -144,7 +145,9 @@ unsigned int hashTable::getPrime(int size)
 // Ignore - public wrapper for easy testing of private hashTable functions, etc.
 void hashTable::test()
 {
-	string str = "inroad";
+	string dict[] = {"one", "two", "three", "four", "five"};
+	for (string s : dict) { insert(s); }
+	
 	for (auto i : data) {
 		if (i.key != "") {
 			cout << i.key << endl;

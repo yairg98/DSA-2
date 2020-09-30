@@ -14,7 +14,7 @@ using namespace std;
 
 
 
-void test(int id)
+void mt_test(int id)
 {
 	chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
 	
@@ -31,7 +31,7 @@ void test(int id)
 }
 
 
-int main()
+void multithreading()
 {
 	cout << "Available threads: " << std::thread::hardware_concurrency() << endl;
 	
@@ -43,7 +43,7 @@ int main()
 		int i = 0;
 		vector<std::thread> all_threads;
 		while ( i < n ) { // thread::hardware_concurrency()
-			all_threads.push_back(thread(test, i));
+			all_threads.push_back(thread(mt_test, i));
 			i++;
 		}
 		
@@ -57,4 +57,10 @@ int main()
 		
 		cout << "Total time: " << timeDiff.count() << endl;
 	}
+}
+
+
+int main()
+{
+	multithreading();
 }
