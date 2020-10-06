@@ -1,5 +1,6 @@
 # include "heap.h"
 #include <string>
+#include <iostream>
 
 
 // Constructor to initialize hashTable with chosen capacity
@@ -16,6 +17,8 @@ int heap::insert(const std::string &id, int key)
     data[pos].id = id;
     data[pos].key = key;
     pos = percUp(pos);
+    filled++;
+    
     return 0;
 }
 
