@@ -23,6 +23,9 @@ public:
   
     // Remove top item from heap
     int deleteMin(const std::string *id, int *key);
+    
+    // For testing purposes
+    int test();
 
  
 private:
