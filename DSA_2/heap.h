@@ -32,6 +32,7 @@ private:
         std::string id; // The id of this node
         int key; // The key of this node
         void *pData; // A pointer to the actual data
+        bool operator<(node n2) const { return key < n2.key; }
     };
  
     int filled = 0;
