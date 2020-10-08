@@ -136,7 +136,8 @@ int heap::percDown(int posCur)
     data[posCur] = data[0];
     mapping.setPointer(data[posCur].id, &data[posCur]);
     data[0] = node();
-    return 0;
+    
+    return posCur;
 }
 
 
@@ -148,9 +149,10 @@ int heap::getPos(node *pn)
 
 int heap::test()
 {
+    /* 
     for (int i=0; i<=filled; i++) {
         std::cout << data[i].id << ": " << data[i].key << std::endl;
     }
-    
+     */
     return 0;
 }

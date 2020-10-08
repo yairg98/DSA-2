@@ -3,12 +3,6 @@ useHeap.exe: useHeap.o heap.o hash.o
 
 useHeap.o: useHeap.cpp
 	g++ -c useHeap.cpp
-    
-test.exe: test.o
-	g++ -o test.exe test.o hash.o
-
-test.o: test.cpp hash.o
-	g++ -c test.cpp
 
 heap.o: heap.cpp heap.h
 	g++ -c heap.cpp
