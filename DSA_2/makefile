@@ -1,7 +1,7 @@
 useHeap.exe: useHeap.o heap.o hash.o
 	g++ -o useHeap.exe useHeap.o heap.o hash.o
 
-useHeap.o: useHeap.cpp
+useHeap.o: useHeap.cpp heap.h
 	g++ -c useHeap.cpp
 
 heap.o: heap.cpp heap.h

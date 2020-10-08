@@ -19,10 +19,10 @@ public:
     int setKey(const std::string &id, int key);
   
     // Remove item from heap.
-    int remove(const std::string &id, int *key);
+    int remove(std::string &id, int *key);
   
     // Remove top item from heap
-    int deleteMin(const std::string *id, int *key);
+    int deleteMin(std::string *id, int *key);
     
     // For testing purposes
     int test();
@@ -39,6 +39,7 @@ private:
     };
  
     int filled = 0;
+    int capacity = 0;
     std::vector<node> data; // The actual binary heap
     hashTable mapping; // maps ids to node pointers
 

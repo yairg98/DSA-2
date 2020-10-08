@@ -4,80 +4,103 @@
 
 
 // Constructor to initialize hashTable with chosen capacity
-heap::heap( int capacity ) : mapping(capacity*2)
+heap::heap( int capacity ) : mapping(capacity*2), capacity(capacity)
 {
     data.resize(capacity+1);
 }
 
 
-// Insert the goven string and key to the heap.
+// Insert the given string and key to the heap.
 int heap::insert(const std::string &id, int key)
 {
-    int pos = filled+1;
-    data[pos].id = id;
-    data[pos].key = key;
-    pos = percUp(pos);
-    filled++;
-
-    test();
+    // Check if heap is full
+    if ( capacity == filled ) {
+        return 1;
+    }
     
-    return 0;
+    // Check if string is already in heap
+    else if ( mapping.contains(id) ) {
+        return 2;
+    }
+    
+    // Insert the the new node
+    else {
+        int pos = filled+1;
+        data[pos].id = id;
+        data[pos].key = key;
+        pos = percUp(pos);
+        filled++;
+        
+        return 0;
+    }
 }
 
 
 // Change the key of an existing entry.
 int heap::setKey(const std::string &id, int key)
 {
+    // Check if node is in heap
+    if ( mapping.contains(id) ) {
+        return 1;
+    }
+    
     // Find the correct node using the hashtable
-    int pos = getPos((node *)mapping.getPointer(id));
-    
-    data[pos].key = key;
-    percUp(pos);
-    percDown(pos);
-    
-    test();
-    
-    return 0;
+    else {        
+        int pos = getPos((node *)mapping.getPointer(id));
+        data[pos].key = key;
+        percUp(pos);
+        percDown(pos);
+        
+        return 0;
+    }
 }
 
 
 // Remove item from heap.
-int heap::remove(const std::string &id, int *key)
+int heap::remove(std::string &id, int *key)
 {
-    // Find the correct node using the hashtable
-    int pos = getPos((node *)mapping.getPointer(id));
+    // Check if string is in heap
+    if ( mapping.contains(id) ) {    
+        // Find the correct node using the hashtable
+        int pos = getPos((node *)mapping.getPointer(id));
+        // Remove that node and percolate down
+        mapping.remove(data[pos].id);
+        data[pos] = data[filled--];
+        data[filled+1] = node();
+        percDown(pos);
+        
+        return 0;
+    }
     
-    // Remove that node and percolate down
-    mapping.remove(data[pos].id);
-    data[pos] = data[filled--];
-    data[filled+1] = node();
-    percDown(pos);
-    
-    test();
-    
-    return 0;
+    // If string not found in heap
+    else {
+        return 1;
+    }
 }
 
 
 // Remove top item from heap
-int heap::deleteMin(const std::string *id, int *key)
+int heap::deleteMin(std::string *id, int *key)
 {
     // Check if heap is already empty
     if (filled == 0) {
-        return 0;
+        return 1;
     }
+    
     // Remove the top element in the heap and percolate down
     else {
         node min = data[1];
+        
+        if (id != nullptr) { *id = min.id; }
+        if (key != nullptr) { *key = min.key; }
+        
         mapping.remove(min.id);
         data[1] = data[filled--];
         data[filled+1] = node();
         percDown(1);
+        
+        return 0;
     }
-    
-    test();
-    
-    return 0;
 }
 
 
