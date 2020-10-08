@@ -154,5 +154,5 @@ int heap::test()
         std::cout << data[i].id << ": " << data[i].key << std::endl;
     }
      */
-    return 0;
+    return 1;
 }
