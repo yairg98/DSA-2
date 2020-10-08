@@ -28,6 +28,15 @@ int heap::insert(const std::string &id, int key)
 // Change the key of an existing entry.
 int heap::setKey(const std::string &id, int key)
 {
+    // Find the correct node using the hashtable
+    int pos = getPos((node *)mapping.getPointer(id));
+    
+    data[pos].key = key;
+    percUp(pos);
+    percDown(pos);
+    
+    test();
+    
     return 0;
 }
 
@@ -37,6 +46,7 @@ int heap::remove(const std::string &id, int *key)
 {
     // Find the correct node using the hashtable
     int pos = getPos((node *)mapping.getPointer(id));
+    
     // Remove that node and percolate down
     mapping.remove(data[pos].id);
     data[pos] = data[filled--];
