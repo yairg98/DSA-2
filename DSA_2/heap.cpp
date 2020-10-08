@@ -35,6 +35,16 @@ int heap::setKey(const std::string &id, int key)
 // Remove item from heap.
 int heap::remove(const std::string &id, int *key)
 {
+    // Find the correct node using the hashtable
+    int pos = getPos((node *)mapping.getPointer(id));
+    // Remove that node and percolate down
+    mapping.remove(data[pos].id);
+    data[pos] = data[filled--];
+    data[filled+1] = node();
+    percDown(pos);
+    
+    test();
+    
     return 0;
 }
 
@@ -49,6 +59,7 @@ int heap::deleteMin(const std::string *id, int *key)
     // Remove the top element in the heap and percolate down
     else {
         node min = data[1];
+        mapping.remove(min.id);
         data[1] = data[filled--];
         data[filled+1] = node();
         percDown(1);
@@ -67,7 +78,7 @@ int heap::percUp(int posCur)
     data[0] = data[posCur];
     
     // Percolate up the tree
-    while ( data[0].key < data[posCur/2].key ) {
+    while ( data[0] < data[posCur/2] ) {
         data[posCur] = data[posCur/2];
         mapping.setPointer(data[posCur].id, &data[posCur]);
         posCur /= 2;
