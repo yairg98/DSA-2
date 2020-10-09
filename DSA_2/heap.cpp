@@ -60,9 +60,12 @@ int heap::setKey(const std::string &id, int key)
 int heap::remove(std::string &id, int *key)
 {
     // Check if string is in heap
-    if ( mapping.contains(id) ) {    
+    if ( mapping.contains(id) ) {
+    
         // Find the correct node using the hashtable
         int pos = getPos((node *)mapping.getPointer(id));
+        if (key != nullptr) { *key = data[pos].key; }
+        
         // Remove that node and percolate down
         mapping.remove(data[pos].id);
         data[pos] = data[filled--];
