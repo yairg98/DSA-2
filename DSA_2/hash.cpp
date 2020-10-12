@@ -18,6 +18,13 @@ hashTable::hashTable( int size )
 // Insert new value to hash table (returns 0:success, 1:key already present, 2: rehash failed)
 int hashTable::insert(const std::string &key, void *pv)
 {   
+
+	// Rehash when more than half the hashTable capacity is filled
+    if (capacity / (capacity-filled+1) >= 2) {
+        // Attempt rehash; return 2 in case of failure
+        if (rehash() == false) { return 2; }
+    }
+
     // Generate position value from hash function
     int pos = hash(key);
     
@@ -31,11 +38,6 @@ int hashTable::insert(const std::string &key, void *pv)
         return 1;
     }
     
-    // Rehash when more than half the hashTable capacity is filled
-    else if (capacity / (capacity-filled) >= 2) {
-        // Attempt rehash; return 2 in case of failure
-        if (rehash() == false) { return 2; }
-    }
     
     // Insert new key at data[pos]
     data[pos].key = key;

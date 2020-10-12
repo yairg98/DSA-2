@@ -48,7 +48,7 @@ int heap::setKey(const std::string &id, int key)
     else {        
         int pos = getPos((node *)mapping.getPointer(id));
         data[pos].key = key;
-        percUp(pos);
+        pos = percUp(pos);
         percDown(pos);
         
         return 0;
