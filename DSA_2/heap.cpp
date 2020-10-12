@@ -40,7 +40,7 @@ int heap::insert(const std::string &id, int key)
 int heap::setKey(const std::string &id, int key)
 {
     // Check if node is in heap
-    if ( mapping.contains(id) ) {
+    if ( !mapping.contains(id) ) {
         return 1;
     }
     
@@ -175,10 +175,10 @@ int heap::getPos(node *pn)
 
 int heap::test()
 {
-    /* 
+    
     for (int i=0; i<=filled; i++) {
         std::cout << data[i].id << ": " << data[i].key << std::endl;
     }
-     */
+	
     return 1;
 }
