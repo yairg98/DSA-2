@@ -46,7 +46,7 @@ int heap::setKey(const std::string &id, int key)
     
     // Find the correct node using the hashtable
     else {        
-        int pos = getPos((node *)mapping.getPointer(id));
+        int pos = getPos( (node *)mapping.getPointer(id) );
         data[pos].key = key;
         pos = percUp(pos);
         percDown(pos);
@@ -70,7 +70,8 @@ int heap::remove(std::string &id, int *key)
         mapping.remove(data[pos].id);
         data[pos] = data[filled--];
         data[filled+1] = node();
-        percDown(pos);
+        pos = percDown(pos);
+        percUp(pos);
         
         return 0;
     }
@@ -179,6 +180,6 @@ int heap::test()
     for (int i=0; i<=filled; i++) {
         std::cout << data[i].id << ": " << data[i].key << std::endl;
     }
-	
+    
     return 1;
 }
