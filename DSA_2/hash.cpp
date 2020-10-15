@@ -29,7 +29,7 @@ int hashTable::insert(const std::string &key, void *pv)
     int pos = hash(key);
     
     // Search for location of key (if already inserted) or 1st available spot
-    while ( data[pos].isOccupied && (data[pos].key != key)) {
+    while ( (data[pos].isOccupied || data[pos].isDeleted) && (data[pos].key != key)) {
         ++pos %= capacity;
     }
     
@@ -146,7 +146,7 @@ bool hashTable::rehash()
     
     for (auto i : backup) {
         if ( (i.isOccupied == true) && (i.isDeleted == false) ) {
-            insert(i.key);
+            insert(i.key, i.pv);
         }
     }
     return true;

@@ -28,6 +28,7 @@ int heap::insert(const std::string &id, int key)
         int pos = filled+1;
         data[pos].id = id;
         data[pos].key = key;
+        mapping.insert(data[pos].id, &data[pos]);
         pos = percUp(pos);
         filled++;
         
@@ -70,9 +71,10 @@ int heap::remove(std::string &id, int *key)
         mapping.remove(data[pos].id);
         data[pos] = data[filled--];
         data[filled+1] = node();
-        pos = percDown(pos);
-        percUp(pos);
-        
+        if (pos <= filled) {
+            pos = percDown(pos);
+            percUp(pos);
+        }
         return 0;
     }
     
@@ -123,7 +125,7 @@ int heap::percUp(int posCur)
     
     // Insert new node at correct position and clear placeholder
     data[posCur] = data[0];
-    mapping.insert(data[posCur].id, &data[posCur]);
+    mapping.setPointer(data[posCur].id, &data[posCur]);
     data[0] = node();
     
     // Return the position of the new node
