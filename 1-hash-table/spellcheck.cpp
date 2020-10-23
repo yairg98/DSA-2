@@ -55,7 +55,7 @@ void checkLine(string &line, int num, hashTable &dict, ofstream &output)
 	string word = "";
 	bool numerical = false;
 	
-	// Iterate through the linie letter by letter
+	// Iterate through the line letter by letter
 	for (int i=0; i<line.length(); i++) {
 		
 		// Add non-numerical character to "word"
@@ -139,5 +139,5 @@ int main()
 	spellChecker(infile, outfile, dict);
 	t2 = chrono::steady_clock::now();
 	timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
-	cout << "Time to spellcheck document: " << timeDiff.count() << endl;	
+	cout << "Time to spellcheck document: " << timeDiff.count() << endl;
 }
