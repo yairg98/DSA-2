@@ -20,6 +20,7 @@ struct vertex {
     vector<edge> adj;
     bool known = false;
     int dist = 0;
+    vertex *path; // previous vertex on shortest path
     vertex(string s) : id(s) {}
 };
 
@@ -41,7 +42,8 @@ int main() {
     
     // Record each graph edge line-by-line
     while ( getline(input, line) ) {
-		stringstream ss(line);
+		// Parse the line, identifying v1, v2, and weight of edge
+        stringstream ss(line);
         ss >> v1 >> v2 >> weight;
         edge e = edge(v2, weight);
         
@@ -58,8 +60,6 @@ int main() {
         pv->adj.push_back(e);
 	}
     
-    cout << "Loaded" << endl;
     
-    vertices.test();
     
 }
