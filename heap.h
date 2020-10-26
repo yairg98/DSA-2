@@ -12,7 +12,8 @@ public:
     // The constructor initializes the heap.
     heap(int capacity = 0);
 
-    // Insert the goven string and key to the heap.
+    // Insert the given string and key to the heap.
+    // Return 0 if succesful, 1 if heap is full, 2 if string already in heap
     int insert(const std::string &id, int key);
   
     // Change the key of an existing entry.
@@ -22,6 +23,7 @@ public:
     int remove(std::string &id, int *key);
   
     // Remove top item from heap
+    // Return 0 if succesful, 1 if heap is already empty
     int deleteMin(std::string *id, int *key);
     
     // For testing purposes
