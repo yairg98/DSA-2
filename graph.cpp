@@ -42,6 +42,12 @@ void graph::load(string infile) {
 }
 
 
+// Check the validity of given vertex
+bool graph::checkVertex(string v) {
+	return vertices.contains(v);
+}
+
+
 // Run Dijkstra's algorithm to find the shortest path to each vertex
 void graph::dijkstra(string start) {
 

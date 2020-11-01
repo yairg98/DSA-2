@@ -9,21 +9,25 @@ int main() {
     
     string infile, start, outfile;
     
+	// Initialize the empty graph
+    graph g;
+
     // Get the input file
-    cout << "Enter name of graph file: ";
+	cout << "Enter name of graph file: ";
     cin >> infile;
     
-    // Get starting vertex
-    cout << "Enter a valid ID for the starting vertex: ";
-    cin >> start;
+    // Build the graph based on the specified input file
+    g.load(infile);
+	
+	// Get starting vertex
+	do {
+		cout << "Enter a valid ID for the starting vertex: ";
+		cin >> start;
+	} while (g.checkVertex(start) == false);
     
     // Start timer
     chrono::steady_clock::time_point t1 = chrono::steady_clock::now();
     
-    // Initialize the empty graph
-    graph g;
-    // Build the graph based on the specified input file
-    g.load(infile);
     // Find shortest path from specified start point to each other vertex
     g.dijkstra(start);
     

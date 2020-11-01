@@ -39,6 +39,10 @@ public:
 
     // Build the graph from the given file
     void load(string infile);
+	
+	
+	// Check the validity of given vertex
+	bool checkVertex(string v);
     
     
     // Run Dijkstra's algorithm to find the shortest path to each vertex
