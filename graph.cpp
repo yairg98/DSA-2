@@ -63,10 +63,23 @@ void graph::dijkstra(string start) {
 	heap frontier = heap(size);
 	list<edge> :: iterator it;
 	for ( it = pv->adj.begin(); it != pv->adj.end(); it++ ) {
-		pv2 = (vertex *) vertices.getPointer(it->v2);
-		pv2->dist = it->weight;
-		pv2->path = (pv->path) + ", " + it->v2;
-		frontier.insert(it->v2, it->weight);        
+		
+		// Try to insert vertex to frontier
+		if ( frontier.insert(it->v2, it->weight) == 0 ) {
+			pv2 = (vertex *) vertices.getPointer(it->v2);
+			pv2->dist = it->weight;
+			pv2->path = (pv->path) + ", " + it->v2;
+		}
+		
+		// If vertex is already in frontier, compare/change dist and path
+		else {
+			pv2 = (vertex *) vertices.getPointer(it->v2);
+			if (it->weight < pv2->dist) {
+				pv2->dist = it->weight;
+				pv2->path = (pv->path) + ", " + it->v2;
+			}
+			frontier.setKey(it->v2, pv2->dist);
+		}        
 	}
 	
 	string id; // ID of the most vertex returned by deleteMin
