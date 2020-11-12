@@ -4,7 +4,7 @@ findPaths.exe: findPaths.o graph.o heap.o hash.o
 findPaths.o: findPaths.cpp
 	g++ -c findPaths.cpp
     
-graph.o: graph.cpp graph.h
+graph.o: graph.cpp graph.h heap.h
 	g++ -c graph.cpp
 
 heap.o: heap.cpp heap.h

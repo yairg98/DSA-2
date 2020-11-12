@@ -11,7 +11,7 @@ heap::heap( int capacity ) : mapping(capacity*2), capacity(capacity)
 
 
 // Insert the given string and key to the heap.
-int heap::insert(const std::string &id, int key)
+int heap::insert(const std::string &id, int key, void *pn)
 {
     // Check if heap is full
     if ( capacity == filled ) {
@@ -28,6 +28,7 @@ int heap::insert(const std::string &id, int key)
         int pos = filled+1;
         data[pos].id = id;
         data[pos].key = key;
+		data[pos].pData = pn;
         mapping.insert(data[pos].id, &data[pos]);
         pos = percUp(pos);
         filled++;
@@ -86,7 +87,7 @@ int heap::remove(std::string &id, int *key)
 
 
 // Remove top item from heap
-int heap::deleteMin(std::string *id, int *key)
+int heap::deleteMin(std::string *id, int *key, void **ppn)
 {
     // Check if heap is already empty
     if (filled == 0) {
@@ -99,6 +100,7 @@ int heap::deleteMin(std::string *id, int *key)
         
         if (id != nullptr) { *id = min.id; }
         if (key != nullptr) { *key = min.key; }
+        if (ppn != nullptr) { *ppn = &min.key; }
         
         mapping.remove(min.id);
         data[1] = data[filled--];
