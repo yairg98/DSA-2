@@ -12,20 +12,13 @@ int checkMerge(string a, string b, string c)
 	else if ( (a == "") + (b == "") + (c == "") == 3) { return false; }
 	
 	bool merge = false;
+	string c2 = c;
 	
 	// Check if first character of a is the same as first character of c
-	if (a[0] == c[0]) {
-		a.erase(0,1);
-		c.erase(0,1);
-		merge = checkMerge(a, b, c);
-	}
+	if (a[0] == c[0]) {	merge = checkMerge(a.substr(1), b, c.substr(1)); }
 	
 	// Repeat for string b, if merge has not been confirmed yet
-	if (b[0] == c[0] && merge==false) {
-		b.erase(0,1);
-		c.erase(0,1);
-		merge = checkMerge(a, b, c);
-	}
+	if (b[0] == c2[0] && merge==false) { merge = checkMerge(a, b.substr(1), c.substr(1)); }
 	
 	return merge;
 	
