@@ -1,24 +1,35 @@
 #include <string>
 #include <iostream>
+#include<bits/stdc++.h> 
 
 using namespace std;
 
-int checkMerge(string a, string b, string c)
+string checkMerge(string a, string b, string c)
 {
 	// Return true if all three strings are empty
-	if ( (a == "") && (b == "") && (c == "") ) { return true; }
+	if ( (a == "") && (b == "") && (c == "") ) { return ""; }
 	
 	// Return false if two of the three strings are empty
-	else if ( (a == "") + (b == "") + (c == "") == 3) { return false; }
+	else if ( (a == "") + (b == "") + (c == "") == 3) { return "*** NOT A MERGE ***"; }
 	
-	bool merge = false;
-	string c2 = c;
+	// Default return value
+	string merge = "*** NOT A MERGE ***";
 	
 	// Check if first character of a is the same as first character of c
-	if (a[0] == c[0]) {	merge = checkMerge(a.substr(1), b, c.substr(1)); }
+	if (a[0] == c[0]) {
+		merge = checkMerge(a.substr(1), b, c.substr(1));
+	}
+	
+	// If merge was confirmed, construct output string
+	if (merge != "*** NOT A MERGE ***") {
+		merge.insert(0, string(1,toupper(c[0])));
+	}
 	
 	// Repeat for string b, if merge has not been confirmed yet
-	if (b[0] == c2[0] && merge==false) { merge = checkMerge(a, b.substr(1), c.substr(1)); }
+	else if (b[0] == c[0]){
+		merge = checkMerge(a, b.substr(1), c.substr(1));
+		merge.insert(0, string(1,c[0]));
+	}
 	
 	return merge;
 	
