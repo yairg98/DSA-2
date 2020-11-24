@@ -16,19 +16,21 @@ string checkMerge(string a, string b, string c)
 	string merge = "*** NOT A MERGE ***";
 	
 	// Check if first character of a is the same as first character of c
-	if (a[0] == c[0]) {
+	if ( (a != "") && (a[0] == c[0]) ) {
 		merge = checkMerge(a.substr(1), b, c.substr(1));
-	}
-	
-	// If merge was confirmed, construct output string
-	if (merge != "*** NOT A MERGE ***") {
-		merge.insert(0, string(1,toupper(c[0])));
+		// If merge was confirmed, construct output string
+		if (merge != "*** NOT A MERGE ***") {
+			merge.insert(0, string(1,toupper(c[0])));
+		}
 	}
 	
 	// Repeat for string b, if merge has not been confirmed yet
-	else if (b[0] == c[0]){
+	if ( (b != "") && (b[0] == c[0]) && (merge == "*** NOT A MERGE ***") ){
 		merge = checkMerge(a, b.substr(1), c.substr(1));
-		merge.insert(0, string(1,c[0]));
+		// If merge was confirmed, construct output string
+		if (merge != "*** NOT A MERGE ***") {		
+			merge.insert(0, string(1,c[0]));
+		}	
 	}
 	
 	return merge;
