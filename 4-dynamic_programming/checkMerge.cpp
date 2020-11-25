@@ -2,7 +2,8 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+#include <chrono>
 
 using namespace std;
 
@@ -63,9 +64,20 @@ int main()
     cin >> outfile;
 	ofstream output(outfile);
 	
+	// Initialize start/stop timer variables
+	// chrono::steady_clock::time_point t1, t2;
+	// chrono::duration<double> timeDiff;
+	// int n = 0;
+	
 	// Read lines three at a time, and print checkMerge results to output file
 	while (getline(input, a) && getline(input, b) && getline(input, c)) {
+		// t1 = chrono::steady_clock::now();
 		output << checkMerge(a,b,c) << endl;
+		// t2 = chrono::steady_clock::now();
+		// timeDiff = chrono::duration_cast<chrono::duration<double>>(t2 - t1);
+		// cout << "-- " << ++n << " --" << endl;
+		// cout << "Time (seconds): " << timeDiff.count() << endl;
+		memory.clear();
 	}
 	
 }
