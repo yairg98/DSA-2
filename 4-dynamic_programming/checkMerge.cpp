@@ -1,8 +1,14 @@
 #include <string>
 #include <iostream>
-#include<bits/stdc++.h> 
+#include <fstream>
+#include <unordered_map>
+#include <bits/stdc++.h> 
 
 using namespace std;
+
+
+// Record all previously-seen instances
+unordered_map<string, string> memory;
 
 string checkMerge(string a, string b, string c)
 {
@@ -10,7 +16,10 @@ string checkMerge(string a, string b, string c)
 	if ( (a == "") && (b == "") && (c == "") ) { return ""; }
 	
 	// Return false if two of the three strings are empty
-	else if ( (a == "") + (b == "") + (c == "") == 3) { return "*** NOT A MERGE ***"; }
+	else if ( (a == "") + (b == "") + (c == "") == 2) { return "*** NOT A MERGE ***"; }
+	
+	// Check if scenario is already in memory
+	else if (memory.find(a+"\n"+b+"\n"+c) != memory.end()) { return memory[a+"\n"+b+"\n"+c]; }
 	
 	// Default return value
 	string merge = "*** NOT A MERGE ***";
@@ -33,24 +42,30 @@ string checkMerge(string a, string b, string c)
 		}	
 	}
 	
-	return merge;
+	// Add scenario and result to memory
+	memory.insert(make_pair(a+"\n"+b+"\n"+c, merge));
 	
+	return merge;
 }
 
 
 int main()
 {
-	string a, b, c;
+	string infile, outfile, a, b, c;
 	
-	cout << "String a: ";
-	cin >> a;
+	// Get the input file
+	cout << "Enter name of input file: ";
+    cin >> infile;
+	ifstream input(infile);
 	
-	cout << "String b: ";
-	cin >> b;
+	// Get the output file
+    cout << "Enter name of output file: ";
+    cin >> outfile;
+	ofstream output(outfile);
 	
-	cout << "String c: ";
-	cin >> c;
-	
-	cout << checkMerge(a, b, c) << endl;
+	// Read lines three at a time, and print checkMerge results to output file
+	while (getline(input, a) && getline(input, b) && getline(input, c)) {
+		output << checkMerge(a,b,c) << endl;
+	}
 	
 }
