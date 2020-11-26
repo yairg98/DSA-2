@@ -11,7 +11,7 @@ using namespace std;
 // Record all previously-seen instances
 unordered_map<string, string> memory;
 
-string checkMerge(string a, string b, string c)
+string checkMerge(const string &a, const string &b, const string &c)
 {
 	// Return true if all three strings are empty
 	if ( (a == "") && (b == "") && (c == "") ) { return ""; }
